@@ -3,7 +3,7 @@ import { Scroll, Landmark, Quote, User } from 'lucide-react';
 
 const typeConfig = {
   situation: { label: 'Situation', icon: Scroll, color: '#D4AF37' },
-  historical_event: { label: 'Evenement historique', icon: Landmark, color: '#0A1B3F' },
+  historical_event: { label: 'Événement historique', icon: Landmark, color: '#0A1B3F' },
   citation: { label: 'Citation', icon: Quote, color: '#7A0016' },
   personnage: { label: 'Personnage', icon: User, color: '#1C4E34' },
 };
@@ -31,9 +31,6 @@ export default function QuestionCard({ card, onAnswer, disabled, selectedAnswer 
           >
             <TypeIcon className="w-3 h-3" />
             {config.label}
-          </div>
-          <div className="badge-type bg-[#08090C]/10 text-[#565863]">
-            Loi {card.lawNumber}
           </div>
           {card.difficulty && (
             <div className="badge-type bg-[#08090C]/5 text-[#565863]">

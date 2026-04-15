@@ -45,7 +45,7 @@ export default function FeedbackPanel({ card, isCorrect, choiceIndex, onNext }) 
         <div className="flex items-center gap-2 mb-2">
           <Lightbulb className="w-4 h-4 text-[#D4AF37]" />
           <span className="text-xs tracking-[0.15em] uppercase font-semibold text-[#A0A2AB]">
-            {isCorrect ? 'Explication' : 'Pourquoi cette loi est la bonne reponse'}
+            {isCorrect ? 'Explication' : 'Pourquoi cette loi est la bonne réponse'}
           </span>
         </div>
         <p className="text-sm md:text-base leading-relaxed text-[#E8E9ED]" data-testid="feedback-correct-explanation">
@@ -59,7 +59,7 @@ export default function FeedbackPanel({ card, isCorrect, choiceIndex, onNext }) 
           <div className="flex items-center gap-2 mb-2">
             <XCircle className="w-3.5 h-3.5 text-red-400" />
             <span className="text-xs tracking-[0.15em] uppercase font-semibold text-red-400">
-              Pourquoi votre choix est incorrect
+              Pourquoi votre réponse est incorrecte
             </span>
           </div>
           <p className="text-sm leading-relaxed text-[#A0A2AB]" data-testid="feedback-wrong-explanation">

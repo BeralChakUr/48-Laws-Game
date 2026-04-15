@@ -13,10 +13,10 @@ export default function SessionSummary({ summary }) {
   };
 
   const getScoreMessage = () => {
-    if (percentage >= 90) return 'Maitrise exceptionnelle';
+    if (percentage >= 90) return 'Maîtrise exceptionnelle';
     if (percentage >= 70) return 'Bonne performance';
     if (percentage >= 50) return 'En progression';
-    return 'Continuez a pratiquer';
+    return 'Continuez à pratiquer';
   };
 
   return (
@@ -26,7 +26,7 @@ export default function SessionSummary({ summary }) {
         <div className="text-center animate-fade-in-up space-y-3">
           <Trophy className="w-10 h-10 text-[#D4AF37] mx-auto" />
           <h1 className="text-4xl md:text-5xl tracking-tighter font-medium text-gold-gradient">
-            Session Terminee
+            Session Terminée
           </h1>
           <p className={`text-lg font-medium ${getScoreColor()}`} data-testid="score-message">
             {getScoreMessage()}
@@ -72,7 +72,7 @@ export default function SessionSummary({ summary }) {
             <div className="flex items-center gap-2 mb-4">
               <AlertTriangle className="w-4 h-4 text-[#D4AF37]" />
               <h3 className="text-sm tracking-[0.15em] uppercase font-semibold text-[#D4AF37]">
-                Lois les plus confondues
+                Lois les plus confondues 
               </h3>
             </div>
             <div className="space-y-3">
@@ -99,11 +99,11 @@ export default function SessionSummary({ summary }) {
             <div className="flex items-center gap-2 mb-3">
               <RotateCcw className="w-4 h-4 text-red-400" />
               <h3 className="text-sm tracking-[0.15em] uppercase font-semibold text-red-400">
-                Cartes a revoir
+                Cartes à revoir
               </h3>
             </div>
             <p className="text-sm text-[#A0A2AB]">
-              {cardsToReview.length} carte{cardsToReview.length > 1 ? 's' : ''} necessite{cardsToReview.length > 1 ? 'nt' : ''} une revision supplementaire.
+              {cardsToReview.length} carte{cardsToReview.length > 1 ? 's' : ''} nécessite{cardsToReview.length > 1 ? 'nt' : ''} une révision supplémentaire.
             </p>
           </div>
         )}

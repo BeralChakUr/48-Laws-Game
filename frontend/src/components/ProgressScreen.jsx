@@ -17,7 +17,7 @@ export default function ProgressScreen() {
   const globalAccuracy = totalAnswered > 0 ? Math.round((progress.totalCorrect / totalAnswered) * 100) : 0;
 
   const handleReset = () => {
-    if (window.confirm('Etes-vous sur de vouloir reinitialiser toute votre progression ?')) {
+    if (window.confirm('Êtes-vous sûr de vouloir réinitialiser toute votre progression ?')) {
       resetProgress();
       setProgress(loadProgress());
     }
@@ -47,7 +47,7 @@ export default function ProgressScreen() {
             className="flex items-center gap-2 text-xs text-[#565863] hover:text-red-400 transition-colors tracking-wider uppercase"
           >
             <Trash2 className="w-3.5 h-3.5" />
-            Reinitialiser
+            Réinitialiser
           </button>
         </div>
 
@@ -73,12 +73,12 @@ export default function ProgressScreen() {
           <div className="bg-[#12141A] border border-[#D4AF37]/10 rounded-sm p-5 text-center">
             <Crown className="w-5 h-5 text-[#D4AF37] mx-auto mb-2" />
             <p className="text-2xl font-medium text-[#D4AF37]" data-testid="progress-mastered">{cardsMastered}</p>
-            <p className="text-xs text-[#565863] tracking-wider uppercase mt-1">Maitrisees</p>
+            <p className="text-xs text-[#565863] tracking-wider uppercase mt-1">Maîtrisées</p>
           </div>
           <div className="bg-[#12141A] border border-emerald-900/30 rounded-sm p-5 text-center">
             <Target className="w-5 h-5 text-emerald-400 mx-auto mb-2" />
             <p className="text-2xl font-medium text-emerald-400" data-testid="progress-accuracy">{globalAccuracy}%</p>
-            <p className="text-xs text-[#565863] tracking-wider uppercase mt-1">Precision</p>
+            <p className="text-xs text-[#565863] tracking-wider uppercase mt-1">Précision</p>
           </div>
           <div className="bg-[#12141A] border border-[#D4AF37]/10 rounded-sm p-5 text-center">
             <TrendingUp className="w-5 h-5 text-[#A0A2AB] mx-auto mb-2" />
@@ -180,7 +180,7 @@ export default function ProgressScreen() {
               className="w-32 h-32 object-cover rounded-sm mx-auto opacity-40"
             />
             <p className="text-[#565863] text-sm">
-              Aucune session completee. Commencez votre apprentissage !
+              Aucune session complétée. Commencez votre apprentissage !
             </p>
             <button
               data-testid="start-first-session-btn"

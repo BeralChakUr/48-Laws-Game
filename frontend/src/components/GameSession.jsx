@@ -92,7 +92,7 @@ export default function GameSession() {
             {reviewMode && (
               <span className="badge-type bg-[#7A0016]/20 text-red-400 flex items-center gap-1">
                 <Zap className="w-3 h-3" />
-                Revision
+                Révision
               </span>
             )}
             <span className="text-sm text-[#A0A2AB]" data-testid="progress-counter">

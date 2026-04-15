@@ -43,13 +43,13 @@ export default function HomeScreen() {
         {/* Title */}
         <div className="animate-fade-in-up delay-100 space-y-4">
           <p className="text-xs tracking-[0.25em] uppercase font-semibold text-[#D4AF37]">
-            Jeu d'apprentissage strategique
+            Jeu d'apprentissage stratégique
           </p>
           <h1 className="text-5xl md:text-6xl tracking-tighter font-medium text-gold-gradient">
             Les 48 Lois du Pouvoir
           </h1>
           <p className="text-base md:text-lg text-[#A0A2AB] leading-relaxed max-w-lg mx-auto">
-            Maitrisez les principes de strategie et de pouvoir a travers un systeme de cartes interactives et de repetition espacee.
+            Maîtrisez les principes de stratégie et de pouvoir à travers un système de cartes interactives et de répétition espacée.
           </p>
         </div>
 
@@ -101,7 +101,7 @@ export default function HomeScreen() {
               }`}
             >
               <RotateCcw className="w-3.5 h-3.5" />
-              Reviser
+              Réviser
             </button>
             <button
               data-testid="view-progress-btn"
@@ -127,7 +127,7 @@ export default function HomeScreen() {
             <div className="text-center space-y-1">
               <div className="flex items-center justify-center gap-1.5 text-[#D4AF37]">
                 <Target className="w-3.5 h-3.5" />
-                <span className="text-xs tracking-wider uppercase">Maitrise</span>
+                <span className="text-xs tracking-wider uppercase">Maîtrise</span>
               </div>
               <p className="text-2xl font-medium text-[#D4AF37]" data-testid="stats-mastered">{totalMastered}</p>
             </div>
