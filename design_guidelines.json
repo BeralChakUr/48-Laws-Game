@@ -1,0 +1,109 @@
+{
+  "theme": "dark",
+  "archetype": "5 (Jewel & Luxury)",
+  "vibe": "Cinematic, authoritative, historical, strategic mastery",
+  "colors": {
+    "background": {
+      "main": "#08090C",
+      "surface": "#12141A",
+      "glass": "rgba(18, 20, 26, 0.6)"
+    },
+    "cards": {
+      "background_light": "#F2ECD9",
+      "background_dark": "#1A1C23",
+      "text_on_light": "#0A0B0E",
+      "text_on_dark": "#F2ECD9"
+    },
+    "accents": {
+      "gold": "#D4AF37",
+      "deep_red": "#7A0016",
+      "night_blue": "#0A1B3F",
+      "success_green": "#1C4E34"
+    },
+    "text": {
+      "primary": "#E8E9ED",
+      "secondary": "#A0A2AB",
+      "muted": "#565863"
+    }
+  },
+  "typography": {
+    "fonts": {
+      "headings": "'Cormorant Garamond', serif",
+      "body": "'Outfit', sans-serif",
+      "mono": "'JetBrains Mono', monospace"
+    },
+    "scales": {
+      "h1": "text-5xl md:text-6xl tracking-tighter font-medium",
+      "h2": "text-3xl md:text-4xl tracking-tight font-medium",
+      "h3": "text-2xl font-medium",
+      "body": "text-base md:text-lg leading-relaxed",
+      "small_caps": "text-xs tracking-[0.2em] uppercase font-semibold"
+    }
+  },
+  "spacing_and_layout": {
+    "strategy": "Generous spacing, architectural precision, dramatic negative space to feel premium. Focus on one card at a time.",
+    "containers": "max-w-7xl mx-auto px-6 md:px-12",
+    "gaps": "gap-8 md:gap-16",
+    "card_padding": "p-8 md:p-12"
+  },
+  "surface_strategies": {
+    "main_background": "Solid deep anthracite with subtle noise texture overlay to feel like dark felt or ancient stone.",
+    "cards": "Solid golden beige (#F2ECD9) with very subtle inner shadow to mimic premium thick cardstock. Sharp edges or very minimal rounding (rounded-sm).",
+    "feedback_panels": "Glassmorphism (backdrop-blur-xl bg-black/60) with 1px gold or red border depending on correct/incorrect.",
+    "buttons": "Flat solid background, 1px subtle gold border for secondary, solid gold background for primary (with dark text)."
+  },
+  "components": {
+    "buttons": "Shadcn Button customized: removing default rounded-md to rounded-sm, adding tracking-widest uppercase for primary actions.",
+    "cards": "Custom HTML/Tailwind for the game cards to allow 3D flip animations and precise layout, Shadcn Card for progress/stats.",
+    "progress_bar": "Shadcn Progress with gold indicator and dark track.",
+    "dialogs": "Shadcn Dialog for end-of-session summary, styled with glassmorphism and dark luxury vibe.",
+    "typography": "Use pure HTML tags (h1, h2, p) with custom Tailwind classes."
+  },
+  "visual_enhancers": {
+    "motion": {
+      "card_flip": "3D transform flip on answer validation (framer-motion or CSS transform).",
+      "hover": "Subtle -translate-y-1 with shadow-lg for interactive elements.",
+      "page_transition": "Fade in and slight upward slide (duration-500)."
+    },
+    "borders": "1px solid border-[#D4AF37]/30 for structure, NEVER thick borders.",
+    "shadows": {
+      "card": "shadow-[0_20px_50px_rgba(0,0,0,0.5)]",
+      "glow": "drop-shadow-[0_0_15px_rgba(212,175,55,0.3)]"
+    }
+  },
+  "media": {
+    "image_urls": {
+      "hero_background": {
+        "url": "https://images.unsplash.com/photo-1647101734210-ff5d79813069?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA4Mzl8MHwxfHNlYXJjaHwxfHxkYXJrJTIwZ29sZCUyMGFic3RyYWN0JTIwdGV4dHVyZXxlbnwwfHx8fDE3NzYyMzUzOTR8MA&ixlib=rb-4.1.0&q=85",
+        "description": "Black with gold swirls. Use as a very faint, low opacity (10-15%) background texture for the home screen to give a luxurious, atmospheric feel."
+      },
+      "card_texture": {
+        "url": "https://images.unsplash.com/photo-1647104568641-bd427704384c?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA4Mzl8MHwxfHNlYXJjaHwyfHxkYXJrJTIwZ29sZCUyMGFic3RyYWN0JTIwdGV4dHVyZXxlbnwwfHx8fDE3NzYyMzUzOTR8MA&ixlib=rb-4.1.0&q=85",
+        "description": "Gold abstract close up. Can be used as a subtle mask or accent inside the game cards or for the 'Mastery' badge."
+      },
+      "strategy_icon_1": {
+        "url": "https://images.unsplash.com/photo-1625750331870-624de6fd3452?crop=entropy&cs=srgb&fm=jpg&ixid=M3w7NTY2Nzh8MHwxfHNlYXJjaHwzfHxjaGVzcyUyMHBpZWNlJTIwZGFya3xlbnwwfHx8fDE3NzYyMzUzOTR8MA&ixlib=rb-4.1.0&q=85",
+        "description": "Chess piece on dark table. Use as a decorative element on the 'Progression/Stats' screen or empty states."
+      },
+      "strategy_icon_2": {
+        "url": "https://images.unsplash.com/photo-1654592200845-f5d22b8da331?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzh8MHwxfHNlYXJjaHwxfHxjaGVzcyUyMHBpZWNlJTIwZGFya3xlbnwwfHx8fDE3NzYyMzUzOTR8MA&ixlib=rb-4.1.0&q=85",
+        "description": "Statue of a man riding a horse. Use for the 'History/Historical Example' section in the feedback panel to ground it in history."
+      }
+    }
+  },
+  "accessibility": {
+    "contrast": "Ensure text on the golden beige cards is pure black or very dark anthracite (#0A0B0E) for maximum legibility. Text on dark backgrounds must be off-white.",
+    "focus": "focus:ring-2 focus:ring-[#D4AF37] focus:outline-none",
+    "motion": "Respect prefers-reduced-motion for the card flipping animations."
+  },
+  "instructions_to_main_agent": [
+    "Install and use Phosphor Icons (@phosphor-icons/react) with duotone weight for a premium feel.",
+    "For the Home Screen: Center alignment is acceptable here for a cinematic title entrance. Use the hero_background image with very low opacity.",
+    "For the Game Session: Do NOT center everything. The card should be prominent. Question text left-aligned, multiple choice options as wide, distinct buttons with hover states.",
+    "For Feedback Panel: When a user answers, reveal the historical explanation below the card. Use a distinct background (like glassmorphism) for the feedback to separate it from the card.",
+    "Ensure the Spaced Repetition logic is MOCKED effectively via a local state/timer if a real backend isn't connected. Highlight 'mocked' in the final summary.",
+    "Apply data-testid to all interactive elements (buttons, cards, answers).",
+    "Avoid Shadcn 'Card' wrapper for the actual game playing cards; build a custom div with the golden beige background and precise padding to look like a physical artifact.",
+    "Inject a grain/noise texture across the entire body for a tactile, 'non-digital' feel."
+  ]
+}
