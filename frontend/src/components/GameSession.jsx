@@ -14,8 +14,10 @@ import {
   getProgress,
   getSessionSummary,
 } from '../utils/sessionEngine';
-import { updateProgressAfterSession, loadProgress } from '../utils/storage';
+import { updateProgressAfterSession, loadProgress, unlockAchievements } from '../utils/storage';
 import { calculateXP } from '../utils/xpSystem';
+import { checkAchievements, ACHIEVEMENTS } from '../utils/achievements';
+import { Toaster, toast } from 'sonner';
 
 export default function GameSession() {
   const navigate = useNavigate();
@@ -78,11 +80,24 @@ export default function GameSession() {
       hasSavedRef.current = true;
       const summary = getSessionSummary(session);
       const updatedProgress = updateProgressAfterSession(summary);
+      const newAchievements = checkAchievements(updatedProgress);
+      if (newAchievements.length > 0) {
+        unlockAchievements(newAchievements);
+        newAchievements.forEach((id) => {
+          const a = ACHIEVEMENTS.find((x) => x.id === id);
+          if (a) toast.success(`Badge débloqué : ${a.title}`, { description: a.description });
+        });
+      }
       setSavedSummary(summary);
       setSavedProgress(updatedProgress);
     }
     if (savedSummary && savedProgress) {
-      return <SessionSummary summary={savedSummary} progress={savedProgress} />;
+      return (
+        <>
+          <Toaster position="top-center" richColors theme="dark" />
+          <SessionSummary summary={savedSummary} progress={savedProgress} />
+        </>
+      );
     }
     return null;
   }

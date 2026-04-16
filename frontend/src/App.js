@@ -4,6 +4,7 @@ import HomeScreen from "@/components/HomeScreen";
 import GameSession from "@/components/GameSession";
 import ProgressScreen from "@/components/ProgressScreen";
 import StoryMode from "@/components/StoryMode";
+import AchievementsScreen from "@/components/AchievementsScreen";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Route path="/session" element={<GameSession />} />
         <Route path="/progress" element={<ProgressScreen />} />
         <Route path="/story" element={<StoryMode />} />
+        <Route path="/achievements" element={<AchievementsScreen />} />
       </Routes>
     </BrowserRouter>
   );

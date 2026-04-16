@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Crown, BookOpen, Target, TrendingUp, Play, RotateCcw, Scroll } from 'lucide-react';
+import { Crown, BookOpen, Target, TrendingUp, Play, RotateCcw, Scroll, Award } from 'lucide-react';
 import { loadProgress, getWeakLaws } from '../utils/storage';
 import { Progress } from './ui/progress';
 import XPBar from './XPBar';
 import LevelBadge from './LevelBadge';
+import { ACHIEVEMENTS } from '../utils/achievements';
 
 export default function HomeScreen() {
   const navigate = useNavigate();
@@ -15,6 +16,7 @@ export default function HomeScreen() {
   const weakLaws = getWeakLaws(progress);
   const hasErrors = weakLaws.length > 0;
   const xp = progress.xp || 0;
+  const unlockedCount = (progress.unlockedAchievements || []).length;
 
   const startSession = (reviewMode = false) => {
     const weakLawNumbers = reviewMode ? weakLaws.slice(0, 10).map((l) => l.lawNumber) : [];
@@ -127,6 +129,17 @@ export default function HomeScreen() {
               <RotateCcw className="w-3.5 h-3.5" />
               Réviser
             </button>
+            <button
+              data-testid="achievements-btn"
+              onClick={() => navigate('/achievements')}
+              className="flex-1 flex items-center justify-center gap-2 px-5 py-3 rounded-sm text-sm font-medium tracking-wider uppercase transition-all duration-200 border bg-transparent text-[#D4AF37] border-[#D4AF37]/20 hover:bg-[#D4AF37]/5 hover:border-[#D4AF37]/40"
+            >
+              <Award className="w-3.5 h-3.5" />
+              {unlockedCount > 0 ? `${unlockedCount}` : ''} Badges
+            </button>
+          </div>
+
+          <div className="flex gap-3 max-w-sm mx-auto">
             <button
               data-testid="view-progress-btn"
               onClick={() => navigate('/progress')}

@@ -12,8 +12,10 @@ import {
   getStoryProgress,
   getStorySummary,
 } from '../utils/storyEngine';
-import { loadProgress, saveProgress } from '../utils/storage';
+import { loadProgress, saveProgress, unlockAchievements } from '../utils/storage';
 import { applyXP } from '../utils/xpSystem';
+import { checkAchievements, ACHIEVEMENTS } from '../utils/achievements';
+import { Toaster, toast } from 'sonner';
 
 export default function StoryMode() {
   const navigate = useNavigate();
@@ -38,8 +40,19 @@ export default function StoryMode() {
     setCurrentXP(newXP);
     const prog = loadProgress();
     prog.xp = newXP;
-    prog.storyCompleted = result.isFinished ? (prog.storyCompleted || 0) + 1 : prog.storyCompleted || 0;
+    if (result.isFinished) {
+      prog.storyCompleted = (prog.storyCompleted || 0) + 1;
+    }
     saveProgress(prog);
+
+    const newAchievements = checkAchievements(prog);
+    if (newAchievements.length > 0) {
+      unlockAchievements(newAchievements);
+      newAchievements.forEach((id) => {
+        const a = ACHIEVEMENTS.find((x) => x.id === id);
+        if (a) toast.success(`Badge débloqué : ${a.title}`, { description: a.description });
+      });
+    }
 
     if (result.isFinished) {
       setTimeout(() => setIsFinished(true), 0);
@@ -59,6 +72,7 @@ export default function StoryMode() {
     const summary = getStorySummary(story);
     return (
       <div className="min-h-screen px-4 md:px-6 py-12" data-testid="story-summary">
+        <Toaster position="top-center" richColors theme="dark" />
         <div className="max-w-2xl mx-auto space-y-10">
           <div className="text-center animate-fade-in-up space-y-3">
             <Trophy className="w-10 h-10 text-[#D4AF37] mx-auto" />
@@ -147,6 +161,7 @@ export default function StoryMode() {
 
   return (
     <div className="min-h-screen px-4 md:px-6 py-8" data-testid="story-mode">
+      <Toaster position="top-center" richColors theme="dark" />
       {/* Header */}
       <div className="max-w-3xl mx-auto mb-6">
         <div className="flex items-center justify-between mb-4">

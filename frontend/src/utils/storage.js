@@ -12,6 +12,8 @@ function defaultProgress() {
     xp: 0,
     storyCompleted: 0,
     failedCardIds: [],
+    unlockedAchievements: [],
+    reviewSessionsCompleted: 0,
   };
 }
 
@@ -85,6 +87,17 @@ export function updateProgressAfterSession(sessionResults) {
 
   saveProgress(progress);
   return { ...progress, sessionXP };
+}
+
+export function unlockAchievements(newIds) {
+  const progress = loadProgress();
+  const current = progress.unlockedAchievements || [];
+  const toAdd = newIds.filter((id) => !current.includes(id));
+  if (toAdd.length > 0) {
+    progress.unlockedAchievements = [...current, ...toAdd];
+    saveProgress(progress);
+  }
+  return toAdd;
 }
 
 export function resetProgress() {
