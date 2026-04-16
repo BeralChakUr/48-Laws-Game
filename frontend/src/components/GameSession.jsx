@@ -30,11 +30,9 @@ export default function GameSession() {
   const [showFeedback, setShowFeedback] = useState(false);
   const [lastResult, setLastResult] = useState(null);
   const [lastXPChange, setLastXPChange] = useState(null);
-  const [isFinished, setIsFinished] = useState(false);
   const [currentXP, setCurrentXP] = useState(() => loadProgress().xp || 0);
-  const [savedSummary, setSavedSummary] = useState(null);
-  const [savedProgress, setSavedProgress] = useState(null);
-  const hasSavedRef = useRef(false);
+  const [finishData, setFinishData] = useState(null);
+  const sessionDoneRef = useRef(false);
 
   const currentCard = getCurrentCard(session);
   const progress = getProgress(session);
@@ -58,9 +56,8 @@ export default function GameSession() {
       setCurrentXP((prev) => Math.max(0, prev + xpChange));
       setShowFeedback(true);
       setSession(result.session);
-
       if (result.isFinished) {
-        setTimeout(() => setIsFinished(true), 0);
+        sessionDoneRef.current = true;
       }
     },
     [session]
@@ -70,44 +67,35 @@ export default function GameSession() {
     setShowFeedback(false);
     setLastResult(null);
     setLastXPChange(null);
-    if (session.currentIndex >= session.queue.length) {
-      setIsFinished(true);
-    }
-  }, [session]);
-
-  if (isFinished) {
-    if (!hasSavedRef.current) {
-      hasSavedRef.current = true;
+    if (sessionDoneRef.current || session.currentIndex >= session.queue.length) {
+      // Compute summary and save immediately
       const summary = getSessionSummary(session);
       const updatedProgress = updateProgressAfterSession(summary);
       const newAchievements = checkAchievements(updatedProgress);
       if (newAchievements.length > 0) {
         unlockAchievements(newAchievements);
-        newAchievements.forEach((id) => {
-          const a = ACHIEVEMENTS.find((x) => x.id === id);
-          if (a) toast.success(`Badge débloqué : ${a.title}`, { description: a.description });
-        });
+        setTimeout(() => {
+          newAchievements.forEach((id) => {
+            const a = ACHIEVEMENTS.find((x) => x.id === id);
+            if (a) toast.success(`Badge débloqué : ${a.title}`, { description: a.description });
+          });
+        }, 300);
       }
-      setSavedSummary(summary);
-      setSavedProgress(updatedProgress);
+      setFinishData({ summary, progress: updatedProgress });
     }
-    if (savedSummary && savedProgress) {
-      return (
-        <>
-          <Toaster position="top-center" richColors theme="dark" />
-          <SessionSummary summary={savedSummary} progress={savedProgress} />
-        </>
-      );
-    }
-    return null;
+  }, [session]);
+
+  if (finishData) {
+    return (
+      <>
+        <Toaster position="top-center" richColors theme="dark" />
+        <SessionSummary summary={finishData.summary} progress={finishData.progress} />
+      </>
+    );
   }
 
-  if (!currentCard) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p className="text-[#A0A2AB]">Chargement...</p>
-      </div>
-    );
+  if (!currentCard && !showFeedback) {
+    return null;
   }
 
   return (

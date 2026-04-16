@@ -55,17 +55,19 @@ export function submitAnswer(session, choiceIndex) {
     newSession.errorCounts[card.id] = errorCount;
     newSession.correctStreaks[card.id] = 0;
 
-    let spacing;
-    if (errorCount === 1) spacing = 3;
-    else if (errorCount === 2) spacing = 5;
-    else spacing = 7;
+    if (errorCount <= 3) {
+      let spacing;
+      if (errorCount === 1) spacing = 3;
+      else if (errorCount === 2) spacing = 5;
+      else spacing = 7;
 
-    const insertAt = Math.min(
-      newSession.currentIndex + spacing + 1,
-      newSession.queue.length
-    );
-    newSession.queue.splice(insertAt, 0, { ...card, _reinserted: true });
-    newSession.totalInserted += 1;
+      const insertAt = Math.min(
+        newSession.currentIndex + spacing + 1,
+        newSession.queue.length
+      );
+      newSession.queue.splice(insertAt, 0, { ...card, _reinserted: true });
+      newSession.totalInserted += 1;
+    }
   } else {
     newSession.correctStreaks[card.id] = (newSession.correctStreaks[card.id] || 0) + 1;
   }
