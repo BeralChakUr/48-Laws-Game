@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { ArrowLeft, Zap } from 'lucide-react';
 import { Progress } from './ui/progress';
@@ -30,6 +30,9 @@ export default function GameSession() {
   const [lastXPChange, setLastXPChange] = useState(null);
   const [isFinished, setIsFinished] = useState(false);
   const [currentXP, setCurrentXP] = useState(() => loadProgress().xp || 0);
+  const [savedSummary, setSavedSummary] = useState(null);
+  const [savedProgress, setSavedProgress] = useState(null);
+  const hasSavedRef = useRef(false);
 
   const currentCard = getCurrentCard(session);
   const progress = getProgress(session);
@@ -71,9 +74,17 @@ export default function GameSession() {
   }, [session]);
 
   if (isFinished) {
-    const summary = getSessionSummary(session);
-    const updatedProgress = updateProgressAfterSession(summary);
-    return <SessionSummary summary={summary} progress={updatedProgress} />;
+    if (!hasSavedRef.current) {
+      hasSavedRef.current = true;
+      const summary = getSessionSummary(session);
+      const updatedProgress = updateProgressAfterSession(summary);
+      setSavedSummary(summary);
+      setSavedProgress(updatedProgress);
+    }
+    if (savedSummary && savedProgress) {
+      return <SessionSummary summary={savedSummary} progress={savedProgress} />;
+    }
+    return null;
   }
 
   if (!currentCard) {

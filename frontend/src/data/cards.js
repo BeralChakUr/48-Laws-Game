@@ -2088,5 +2088,115 @@ export const cards = [
     },
     difficulty: 4,
     tags: ["commerce", "provocation", "moderne"]
+  },
+  {
+    id: "law_018_mod_remote",
+    type: "scenario",
+    question: "Tu travailles en full remote depuis 2 ans. Tes collègues ne te connaissent que par écran. Tu es productif mais invisible dans les décisions importantes. Quel est ton erreur ?",
+    choices: [
+      "Loi 18 : Ne construisez pas de forteresses",
+      "Loi 16 : Utilisez l'absence",
+      "Loi 6 : Attirez l'attention",
+      "Loi 20 : Ne vous engagez envers personne"
+    ],
+    correctAnswer: 0,
+    lawNumber: 18,
+    lawTitle: "Ne construisez pas de forteresses pour vous protéger",
+    correctExplanation: "Le télétravail total peut devenir une forteresse invisible. L'isolement professionnel coupe des alliances, de l'information informelle et de la visibilité nécessaire à l'avancement.",
+    wrongExplanations: {
+      "1": "La loi 16 utilise l'absence stratégiquement. Ici, l'absence n'est pas stratégique mais subie.",
+      "2": "La loi 6 attire l'attention. Le problème n'est pas le manque d'attention mais l'isolement structurel.",
+      "3": "La loi 20 refuse l'engagement. Tu es engagé dans ton travail, tu es juste isolé physiquement."
+    },
+    difficulty: 3,
+    tags: ["télétravail", "isolement", "scénario"]
+  },
+  {
+    id: "law_010_mod_associe",
+    type: "situation",
+    question: "Un entrepreneur talentueux s'associe avec un ami d'enfance qui enchaîne les faillites. Malgré le talent du premier, l'entreprise commune échoue en 18 mois.",
+    choices: [
+      "Loi 10 : Évitez les malchanceux et les malheureux",
+      "Loi 2 : Ne vous fiez pas à vos amis",
+      "Loi 23 : Concentrez vos forces",
+      "Loi 29 : Planifiez jusqu'à la fin"
+    ],
+    correctAnswer: 0,
+    lawNumber: 10,
+    lawTitle: "Évitez les malchanceux et les malheureux",
+    correctExplanation: "Les schémas d'échec sont contagieux. S'associer avec quelqu'un qui porte un historique de défaites introduit cette énergie dans le projet, quel que soit votre propre talent.",
+    wrongExplanations: {
+      "1": "La loi 2 concerne la trahison. L'ami n'a pas trahi, il est simplement porteur de malchance.",
+      "2": "La loi 23 concentre les ressources. Le problème n'est pas la dispersion mais l'association.",
+      "3": "La loi 29 concerne la planification. Même avec un plan parfait, un partenaire malchanceux compromet tout."
+    },
+    difficulty: 2,
+    tags: ["entrepreneuriat", "malchance", "moderne"]
+  },
+  {
+    id: "law_022_mod_negociation2",
+    type: "situation",
+    question: "Face à un client extrêmement exigeant, un fournisseur accepte toutes ses demandes sans résister. Le client, surpris par cette souplesse, augmente ses commandes et le recommande.",
+    choices: [
+      "Loi 22 : Utilisez la tactique de la capitulation",
+      "Loi 43 : Travaillez sur le cœur et l'esprit",
+      "Loi 13 : Faites appel à l'intérêt personnel",
+      "Loi 8 : Obligez les autres à venir à vous"
+    ],
+    correctAnswer: 0,
+    lawNumber: 22,
+    lawTitle: "Utilisez la tactique de la capitulation",
+    correctExplanation: "Parfois, céder à court terme rapporte bien plus à long terme. La capitulation stratégique face à un client exigeant crée de la loyauté et de la confiance.",
+    wrongExplanations: {
+      "1": "La loi 43 gagne les cœurs par persuasion. Ici, c'est la soumission apparente qui crée la loyauté.",
+      "2": "La loi 13 fait appel à l'intérêt. Le client n'agit pas par intérêt calculé mais par gratitude.",
+      "3": "La loi 8 attire les autres. Le fournisseur ne force personne à venir, il s'adapte à la demande."
+    },
+    difficulty: 3,
+    tags: ["commerce", "capitulation", "moderne"]
+  },
+  {
+    id: "law_032_mod_luxe",
+    type: "situation",
+    question: "Une marque vend un sac à main à 3000€ dont le coût de fabrication est 200€. Les clients paient le fantasme d'appartenir à une élite, pas le cuir.",
+    choices: [
+      "Loi 32 : Jouez sur les fantasmes des gens",
+      "Loi 34 : Soyez royal",
+      "Loi 37 : Créez des spectacles convaincants",
+      "Loi 27 : Exploitez le besoin de croire"
+    ],
+    correctAnswer: 0,
+    lawNumber: 32,
+    lawTitle: "Jouez sur les fantasmes des gens",
+    correctExplanation: "Le luxe ne vend pas des objets mais des rêves. Le fantasme d'appartenance, de statut et d'exception justifie un prix sans rapport avec le coût réel.",
+    wrongExplanations: {
+      "1": "La loi 34 concerne la posture royale personnelle. Ici, c'est le client qui aspire à la royauté, pas la marque.",
+      "2": "La loi 37 crée des spectacles. Le marketing luxe utilise l'exclusivité, pas le spectacle de masse.",
+      "3": "La loi 27 exploite la croyance. Le fantasme du luxe n'est pas une croyance religieuse mais un désir de statut."
+    },
+    difficulty: 2,
+    tags: ["luxe", "fantasme", "commerce"]
+  },
+  {
+    id: "law_028_mod_entrepreneur",
+    type: "personnage",
+    question: "Elon Musk annonce publiquement des objectifs démesurés (coloniser Mars, révolutionner le transport). L'audace de ses déclarations attire talents, investisseurs et couverture médiatique.",
+    choices: [
+      "Loi 28 : Faites preuve d'audace",
+      "Loi 6 : Attirez l'attention à tout prix",
+      "Loi 37 : Créez des spectacles convaincants",
+      "Loi 27 : Exploitez le besoin de croire"
+    ],
+    correctAnswer: 0,
+    lawNumber: 28,
+    lawTitle: "Faites preuve d'audace",
+    correctExplanation: "L'audace de Musk n'est pas de la folie mais une stratégie. Des objectifs démesurés inspirent et attirent des ressources que la prudence n'obtiendrait jamais.",
+    wrongExplanations: {
+      "1": "La loi 6 cherche l'attention. Musk ne cherche pas l'attention pour elle-même mais pour mobiliser des ressources.",
+      "2": "La loi 37 crée des spectacles. Les annonces de Musk sont des visions, pas des spectacles visuels.",
+      "3": "La loi 27 exploite la croyance. Bien que lié, l'audace est le moteur, la croyance en est la conséquence."
+    },
+    difficulty: 2,
+    tags: ["entrepreneuriat", "audace", "personnage"]
   }
 ];
