@@ -660,3 +660,78 @@ export const storyEvents = [
     bestChoiceIndex: 1
   }
 ];
+
+const CH_IDS = {
+  cour_royale: ["ch1","ch2","ch3","ch4","ch5","ch6","ch7","ch8","ch9","ch10"],
+  entreprise: ["ch11","ch12","ch13","ch14","ch15"],
+  cour_royale_2: ["ch16","ch17","ch18","ch19","ch20"],
+  social: ["ch21","ch22","ch23","ch24","ch25"],
+  politique: ["ch26","ch27","ch28","ch29","ch30"],
+};
+
+export const scenarios = [
+  {
+    id: "cour_royale",
+    title: "L'Ascension à la Cour",
+    subtitle: "De simple conseiller à maître stratège",
+    description: "Tu arrives à la cour du roi comme nouveau conseiller. Navigue les intrigues, les trahisons et les alliances pour gravir les échelons du pouvoir royal.",
+    chapterCount: 10,
+    color: "#D4AF37",
+    iconName: "Crown",
+    difficulty: 2,
+    tags: ["intrigue", "royauté", "trahison"],
+    events: storyEvents.filter(e => CH_IDS.cour_royale.includes(e.id)),
+  },
+  {
+    id: "entreprise",
+    title: "La Conquête Corporate",
+    subtitle: "D'employé à directeur",
+    description: "Tu intègres une grande entreprise du CAC 40. L'open space est un champ de bataille silencieux. Managers toxiques, saboteurs et promotions piégées t'attendent.",
+    chapterCount: 5,
+    color: "#4A90D9",
+    iconName: "Briefcase",
+    difficulty: 3,
+    tags: ["management", "carrière", "corporate"],
+    events: storyEvents.filter(e => CH_IDS.entreprise.includes(e.id)),
+  },
+  {
+    id: "cour_royale_2",
+    title: "Le Nouveau Règne",
+    subtitle: "Survivre au changement de pouvoir",
+    description: "Le vieux roi est mort. Un nouveau souverain prend le trône avec ses propres favoris. Adapte-toi ou péris dans cette nouvelle cour pleine de dangers.",
+    chapterCount: 5,
+    color: "#7A0016",
+    iconName: "Shield",
+    difficulty: 3,
+    tags: ["transition", "diplomatie", "guerre"],
+    events: storyEvents.filter(e => CH_IDS.cour_royale_2.includes(e.id)),
+  },
+  {
+    id: "social",
+    title: "Dynamiques Sociales",
+    subtitle: "Maîtriser les relations humaines",
+    description: "Galas, scandales, héritages et réseaux sociaux. Chaque interaction est un jeu de pouvoir. Apprends à naviguer les dynamiques sociales du monde moderne.",
+    chapterCount: 5,
+    color: "#1C4E34",
+    iconName: "Users",
+    difficulty: 2,
+    tags: ["réseau", "scandale", "influence"],
+    events: storyEvents.filter(e => CH_IDS.social.includes(e.id)),
+  },
+  {
+    id: "politique",
+    title: "L'Arène Politique",
+    subtitle: "Du candidat au sommet du pouvoir",
+    description: "Élections, lobbys, coalitions et crises médiatiques. La politique est le théâtre ultime du pouvoir. Chaque décision façonne l'avenir d'une nation.",
+    chapterCount: 5,
+    color: "#6B4E9B",
+    iconName: "Globe",
+    difficulty: 4,
+    tags: ["élection", "lobby", "diplomatie"],
+    events: storyEvents.filter(e => CH_IDS.politique.includes(e.id)),
+  },
+];
+
+export function getScenarioById(id) {
+  return scenarios.find(s => s.id === id) || null;
+}

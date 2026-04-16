@@ -1,10 +1,10 @@
 import { useState, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { ArrowLeft, ArrowRight, BookOpen, Scroll, Trophy, Sparkles, CheckCircle, XCircle, MinusCircle } from 'lucide-react';
 import { Progress } from './ui/progress';
 import XPBar from './XPBar';
 import LevelBadge from './LevelBadge';
-import { storyEvents } from '../data/storyEvents';
+import { getScenarioById } from '../data/storyEvents';
 import {
   createStorySession,
   getCurrentEvent,
@@ -19,17 +19,23 @@ import { Toaster, toast } from 'sonner';
 
 export default function StoryMode() {
   const navigate = useNavigate();
-  const [story, setStory] = useState(() => createStorySession(storyEvents));
+  const { scenarioId } = useParams();
+  const scenario = getScenarioById(scenarioId);
+
+  const [story, setStory] = useState(() =>
+    scenario ? createStorySession(scenario.events) : null
+  );
   const [showResult, setShowResult] = useState(false);
   const [lastResult, setLastResult] = useState(null);
   const [isFinished, setIsFinished] = useState(false);
   const [currentXP, setCurrentXP] = useState(() => loadProgress().xp || 0);
   const [xpChange, setXpChange] = useState(null);
 
-  const currentEvent = getCurrentEvent(story);
-  const progress = getStoryProgress(story);
+  const currentEvent = story ? getCurrentEvent(story) : null;
+  const progress = story ? getStoryProgress(story) : { current: 0, total: 0, percentage: 0 };
 
   const handleChoice = useCallback((choiceIndex) => {
+    if (!story || !scenario) return;
     const result = submitStoryChoice(story, choiceIndex);
     setLastResult(result);
     setShowResult(true);
@@ -38,11 +44,24 @@ export default function StoryMode() {
 
     const newXP = applyXP(currentXP, result.xpGain);
     setCurrentXP(newXP);
+
     const prog = loadProgress();
     prog.xp = newXP;
+
     if (result.isFinished) {
       prog.storyCompleted = (prog.storyCompleted || 0) + 1;
+      const sp = prog.scenarioProgress || {};
+      const prev = sp[scenarioId] || { completedCount: 0, xp: 0, bestChoices: 0 };
+      const summary = getStorySummary(result.story);
+      sp[scenarioId] = {
+        completedCount: prev.completedCount + 1,
+        xp: prev.xp + summary.totalXP,
+        bestChoices: Math.max(prev.bestChoices, summary.bestChoices),
+        lastPlayed: new Date().toISOString(),
+      };
+      prog.scenarioProgress = sp;
     }
+
     saveProgress(prog);
 
     const newAchievements = checkAchievements(prog);
@@ -57,17 +76,34 @@ export default function StoryMode() {
     if (result.isFinished) {
       setTimeout(() => setIsFinished(true), 0);
     }
-  }, [story, currentXP]);
+  }, [story, currentXP, scenarioId, scenario]);
 
   const handleNext = useCallback(() => {
     setShowResult(false);
     setLastResult(null);
     setXpChange(null);
-    if (story.currentIndex >= story.events.length) {
+    if (story && story.currentIndex >= story.events.length) {
       setIsFinished(true);
     }
   }, [story]);
 
+  if (!scenario || !story) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center space-y-4">
+          <p className="text-[#A0A2AB]">Scénario introuvable.</p>
+          <button
+            onClick={() => navigate('/story')}
+            className="px-6 py-3 bg-[#D4AF37] text-[#08090C] rounded-sm text-sm font-semibold tracking-widest uppercase"
+          >
+            Retour aux scénarios
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Finished summary
   if (isFinished) {
     const summary = getStorySummary(story);
     return (
@@ -75,11 +111,11 @@ export default function StoryMode() {
         <Toaster position="top-center" richColors theme="dark" />
         <div className="max-w-2xl mx-auto space-y-10">
           <div className="text-center animate-fade-in-up space-y-3">
-            <Trophy className="w-10 h-10 text-[#D4AF37] mx-auto" />
+            <Trophy className="w-10 h-10 mx-auto" style={{ color: scenario.color }} />
             <h1 className="text-4xl md:text-5xl tracking-tighter font-medium text-gold-gradient">
-              Histoire Terminée
+              {scenario.title}
             </h1>
-            <p className="text-lg text-[#A0A2AB]">Ton ascension au pouvoir est complète.</p>
+            <p className="text-lg text-[#A0A2AB]">Scénario terminé</p>
           </div>
 
           <div className="gold-line" />
@@ -104,7 +140,7 @@ export default function StoryMode() {
 
           <div className="animate-fade-in-up delay-200 bg-[#12141A] border border-[#D4AF37]/10 rounded-sm p-6">
             <div className="flex items-center justify-between mb-3">
-              <span className="text-xs tracking-[0.15em] uppercase font-semibold text-[#D4AF37]">XP gagnés dans l'histoire</span>
+              <span className="text-xs tracking-[0.15em] uppercase font-semibold text-[#D4AF37]">XP gagnés</span>
               <span className={`text-lg font-medium ${summary.totalXP >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
                 {summary.totalXP > 0 ? '+' : ''}{summary.totalXP} XP
               </span>
@@ -116,8 +152,8 @@ export default function StoryMode() {
             <h3 className="text-sm tracking-[0.15em] uppercase font-semibold text-[#A0A2AB]">Tes décisions</h3>
             {summary.choices.map((c, i) => (
               <div key={i} className="flex items-start gap-3 py-2 border-b border-white/5 last:border-0">
-                <span className="shrink-0 text-xs font-mono text-[#D4AF37] bg-[#D4AF37]/10 px-2 py-0.5 rounded-sm mt-0.5">
-                  Ch.{i + 1}
+                <span className="shrink-0 text-xs font-mono px-2 py-0.5 rounded-sm mt-0.5" style={{ backgroundColor: `${scenario.color}15`, color: scenario.color }}>
+                  {i + 1}
                 </span>
                 <div className="flex-1">
                   <p className="text-sm text-[#E8E9ED]">{c.choiceText}</p>
@@ -132,16 +168,16 @@ export default function StoryMode() {
 
           <div className="animate-fade-in-up delay-400 flex gap-3">
             <button
-              data-testid="story-home-btn"
-              onClick={() => navigate('/', { replace: true })}
+              data-testid="story-scenarios-btn"
+              onClick={() => navigate('/story')}
               className="flex-1 flex items-center justify-center gap-2 px-6 py-3.5 bg-[#D4AF37] text-[#08090C] rounded-sm text-sm font-semibold tracking-widest uppercase transition-all duration-200 hover:shadow-[0_0_20px_rgba(212,175,55,0.3)]"
             >
-              Accueil
+              Scénarios
             </button>
             <button
               data-testid="story-replay-btn"
               onClick={() => {
-                setStory(createStorySession(storyEvents));
+                setStory(createStorySession(scenario.events));
                 setIsFinished(false);
                 setShowResult(false);
                 setLastResult(null);
@@ -167,15 +203,20 @@ export default function StoryMode() {
         <div className="flex items-center justify-between mb-4">
           <button
             data-testid="story-quit-btn"
-            onClick={() => navigate('/')}
+            onClick={() => navigate('/story')}
             className="flex items-center gap-2 text-sm text-[#A0A2AB] hover:text-[#E8E9ED] transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
-            Quitter
+            Scénarios
           </button>
-          <span className="text-sm text-[#A0A2AB]" data-testid="story-progress">
-            Chapitre {progress.current} / {progress.total}
-          </span>
+          <div className="flex items-center gap-3">
+            <span className="text-xs tracking-wider uppercase font-semibold" style={{ color: scenario.color }}>
+              {scenario.title}
+            </span>
+            <span className="text-sm text-[#A0A2AB]" data-testid="story-progress">
+              Chapitre {progress.current} / {progress.total}
+            </span>
+          </div>
         </div>
         <div className="progress-gold mb-4">
           <Progress value={progress.percentage} className="h-1 bg-[#1A1C23]" />
@@ -188,9 +229,9 @@ export default function StoryMode() {
         <div className="max-w-3xl mx-auto animate-fade-in-up" data-testid="story-event">
           <div className="game-card rounded-sm p-8 md:p-10 mb-8">
             <div className="flex items-center gap-2 mb-4">
-              <Scroll className="w-4 h-4 text-[#D4AF37]" />
-              <span className="badge-type bg-[#D4AF37]/15 text-[#D4AF37]">
-                Chapitre {currentEvent.chapter}
+              <Scroll className="w-4 h-4" style={{ color: scenario.color }} />
+              <span className="badge-type" style={{ backgroundColor: `${scenario.color}15`, color: scenario.color }}>
+                Chapitre {progress.current}
               </span>
             </div>
             <h2 className="text-2xl md:text-3xl font-medium text-[#0A0B0E] mb-4" data-testid="story-title">
@@ -202,7 +243,7 @@ export default function StoryMode() {
                 <p className="text-sm md:text-base leading-relaxed">{currentEvent.context}</p>
               </div>
               <div>
-                <p className="text-xs tracking-[0.15em] uppercase font-semibold text-[#D4AF37] mb-2">Situation</p>
+                <p className="text-xs tracking-[0.15em] uppercase font-semibold mb-2" style={{ color: scenario.color }}>Situation</p>
                 <p className="text-base md:text-lg leading-relaxed font-medium">{currentEvent.situation}</p>
               </div>
             </div>
@@ -257,8 +298,8 @@ export default function StoryMode() {
 
             <div className="mb-5 pb-5 border-b border-white/10">
               <div className="flex items-center gap-2 mb-2">
-                <BookOpen className="w-4 h-4 text-[#D4AF37]" />
-                <span className="text-xs tracking-[0.2em] uppercase font-semibold text-[#D4AF37]">
+                <BookOpen className="w-4 h-4" style={{ color: scenario.color }} />
+                <span className="text-xs tracking-[0.2em] uppercase font-semibold" style={{ color: scenario.color }}>
                   Loi {lastResult.choice.law}
                 </span>
               </div>
@@ -266,19 +307,13 @@ export default function StoryMode() {
             </div>
 
             <div className="mb-5">
-              <p className="text-xs tracking-[0.15em] uppercase font-semibold text-[#A0A2AB] mb-2">
-                Conséquence
-              </p>
-              <p className="text-sm md:text-base leading-relaxed text-[#E8E9ED]">
-                {lastResult.choice.explanation}
-              </p>
+              <p className="text-xs tracking-[0.15em] uppercase font-semibold text-[#A0A2AB] mb-2">Conséquence</p>
+              <p className="text-sm md:text-base leading-relaxed text-[#E8E9ED]">{lastResult.choice.explanation}</p>
             </div>
 
             {!lastResult.isBest && (
               <div className="mb-5 bg-emerald-900/10 border border-emerald-900/20 rounded-sm p-4">
-                <p className="text-xs tracking-[0.15em] uppercase font-semibold text-emerald-400 mb-2">
-                  Le meilleur choix était
-                </p>
+                <p className="text-xs tracking-[0.15em] uppercase font-semibold text-emerald-400 mb-2">Le meilleur choix était</p>
                 <p className="text-sm text-[#A0A2AB]">
                   « {lastResult.event.choices[lastResult.event.bestChoiceIndex].text} »
                   — Loi {lastResult.event.choices[lastResult.event.bestChoiceIndex].law} : {lastResult.event.choices[lastResult.event.bestChoiceIndex].lawTitle}
@@ -289,7 +324,8 @@ export default function StoryMode() {
             <button
               data-testid="story-next-btn"
               onClick={handleNext}
-              className="mt-2 flex items-center gap-2 px-6 py-3 bg-[#D4AF37] text-[#08090C] rounded-sm text-sm font-semibold tracking-widest uppercase transition-all duration-200 hover:shadow-[0_0_20px_rgba(212,175,55,0.3)]"
+              className="mt-2 flex items-center gap-2 px-6 py-3 text-[#08090C] rounded-sm text-sm font-semibold tracking-widest uppercase transition-all duration-200 hover:-translate-y-0.5"
+              style={{ backgroundColor: scenario.color }}
             >
               {story.currentIndex >= story.events.length ? 'Voir le résumé' : 'Chapitre suivant'}
               <ArrowRight className="w-4 h-4" />

@@ -14,6 +14,7 @@ function defaultProgress() {
     failedCardIds: [],
     unlockedAchievements: [],
     reviewSessionsCompleted: 0,
+    scenarioProgress: {},
   };
 }
 
