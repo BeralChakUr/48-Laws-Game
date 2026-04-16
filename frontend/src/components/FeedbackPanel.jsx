@@ -1,6 +1,6 @@
 import { CheckCircle, XCircle, Lightbulb, ArrowRight, BookOpen } from 'lucide-react';
 
-export default function FeedbackPanel({ card, isCorrect, choiceIndex, onNext }) {
+export default function FeedbackPanel({ card, isCorrect, choiceIndex, onNext, xpChange = null }) {
   return (
     <div
       className={`w-full max-w-3xl mx-auto mt-6 animate-slide-in-right feedback-glass rounded-sm p-6 md:p-8 ${
@@ -24,6 +24,14 @@ export default function FeedbackPanel({ card, isCorrect, choiceIndex, onNext }) 
               Incorrect
             </h3>
           </>
+        )}
+        {xpChange !== null && (
+          <span
+            className={`ml-auto text-sm font-semibold ${xpChange >= 0 ? 'text-emerald-400' : 'text-red-400'}`}
+            data-testid="feedback-xp"
+          >
+            {xpChange > 0 ? '+' : ''}{xpChange} XP
+          </span>
         )}
       </div>
 

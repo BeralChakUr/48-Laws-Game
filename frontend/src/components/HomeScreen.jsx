@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Crown, BookOpen, Target, TrendingUp, Play, RotateCcw } from 'lucide-react';
+import { Crown, BookOpen, Target, TrendingUp, Play, RotateCcw, Scroll } from 'lucide-react';
 import { loadProgress, getWeakLaws } from '../utils/storage';
 import { Progress } from './ui/progress';
+import XPBar from './XPBar';
+import LevelBadge from './LevelBadge';
 
 export default function HomeScreen() {
   const navigate = useNavigate();
@@ -12,6 +14,7 @@ export default function HomeScreen() {
   const totalMastered = progress.cardsMastered.length;
   const weakLaws = getWeakLaws(progress);
   const hasErrors = weakLaws.length > 0;
+  const xp = progress.xp || 0;
 
   const startSession = (reviewMode = false) => {
     const weakLawNumbers = reviewMode ? weakLaws.slice(0, 10).map((l) => l.lawNumber) : [];
@@ -22,7 +25,6 @@ export default function HomeScreen() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-6 py-12 hero-bg" data-testid="home-screen">
-      {/* Background image */}
       <div
         className="fixed inset-0 opacity-[0.08] pointer-events-none"
         style={{
@@ -32,13 +34,25 @@ export default function HomeScreen() {
         }}
       />
 
-      <div className="relative z-10 max-w-2xl w-full text-center space-y-12">
-        {/* Crown icon */}
-        <div className="animate-fade-in-up flex justify-center">
-          <div className="w-16 h-16 rounded-sm border border-[#D4AF37]/30 flex items-center justify-center bg-[#12141A]">
-            <Crown className="w-8 h-8 text-[#D4AF37]" />
+      <div className="relative z-10 max-w-2xl w-full text-center space-y-10">
+        {/* Level badge + XP */}
+        {xp > 0 && (
+          <div className="animate-fade-in flex flex-col items-center gap-3">
+            <LevelBadge xp={xp} />
+            <div className="w-64">
+              <XPBar xp={xp} />
+            </div>
           </div>
-        </div>
+        )}
+
+        {/* Crown icon */}
+        {xp === 0 && (
+          <div className="animate-fade-in-up flex justify-center">
+            <div className="w-16 h-16 rounded-sm border border-[#D4AF37]/30 flex items-center justify-center bg-[#12141A]">
+              <Crown className="w-8 h-8 text-[#D4AF37]" />
+            </div>
+          </div>
+        )}
 
         {/* Title */}
         <div className="animate-fade-in-up delay-100 space-y-4">
@@ -87,6 +101,16 @@ export default function HomeScreen() {
           >
             <Play className="w-4 h-4" />
             Commencer une session
+          </button>
+
+          {/* Story mode button */}
+          <button
+            data-testid="story-mode-btn"
+            onClick={() => navigate('/story')}
+            className="w-full max-w-sm mx-auto flex items-center justify-center gap-3 px-8 py-4 bg-[#12141A] text-[#F2ECD9] border border-[#D4AF37]/25 rounded-sm text-sm font-semibold tracking-widest uppercase transition-all duration-200 hover:bg-[#D4AF37]/10 hover:border-[#D4AF37]/50 hover:-translate-y-0.5"
+          >
+            <Scroll className="w-4 h-4 text-[#D4AF37]" />
+            Mode Histoire
           </button>
 
           <div className="flex gap-3 max-w-sm mx-auto">

@@ -1,10 +1,13 @@
 import { useNavigate } from 'react-router-dom';
 import { Trophy, Target, XCircle, AlertTriangle, ArrowRight, Home, RotateCcw } from 'lucide-react';
-import { Progress } from './ui/progress';
+import XPBar from './XPBar';
+import LevelBadge from './LevelBadge';
 
-export default function SessionSummary({ summary }) {
+export default function SessionSummary({ summary, progress }) {
   const navigate = useNavigate();
   const { total, correct, wrong, percentage, confusedLaws, cardsToReview } = summary;
+  const sessionXP = progress.sessionXP || 0;
+  const totalXP = progress.xp || 0;
 
   const getScoreColor = () => {
     if (percentage >= 80) return 'text-emerald-400';
@@ -35,8 +38,8 @@ export default function SessionSummary({ summary }) {
 
         <div className="gold-line" />
 
-        {/* Score circle */}
-        <div className="animate-fade-in-up delay-100 flex justify-center">
+        {/* Score + XP */}
+        <div className="animate-fade-in-up delay-100 flex flex-col items-center gap-6">
           <div className="relative w-36 h-36 rounded-full border-2 border-[#D4AF37]/30 flex items-center justify-center bg-[#12141A]">
             <div className="text-center">
               <p className={`text-4xl font-medium ${getScoreColor()}`} data-testid="score-percentage">
@@ -44,6 +47,15 @@ export default function SessionSummary({ summary }) {
               </p>
               <p className="text-xs text-[#565863] tracking-wider uppercase mt-1">Score</p>
             </div>
+          </div>
+          <div className="flex items-center gap-4">
+            <span className={`text-lg font-semibold ${sessionXP >= 0 ? 'text-emerald-400' : 'text-red-400'}`} data-testid="session-xp">
+              {sessionXP > 0 ? '+' : ''}{sessionXP} XP
+            </span>
+            <LevelBadge xp={totalXP} compact />
+          </div>
+          <div className="w-64">
+            <XPBar xp={totalXP} />
           </div>
         </div>
 
@@ -72,7 +84,7 @@ export default function SessionSummary({ summary }) {
             <div className="flex items-center gap-2 mb-4">
               <AlertTriangle className="w-4 h-4 text-[#D4AF37]" />
               <h3 className="text-sm tracking-[0.15em] uppercase font-semibold text-[#D4AF37]">
-                Lois les plus confondues 
+                Lois les plus confondues
               </h3>
             </div>
             <div className="space-y-3">

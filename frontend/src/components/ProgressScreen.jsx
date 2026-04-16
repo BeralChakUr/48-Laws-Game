@@ -1,8 +1,11 @@
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, BookOpen, Target, XCircle, TrendingUp, Trash2, Crown } from 'lucide-react';
 import { Progress } from './ui/progress';
+import XPBar from './XPBar';
+import LevelBadge from './LevelBadge';
 import { loadProgress, resetProgress, getWeakLaws } from '../utils/storage';
 import { cards as allCards } from '../data/cards';
+import { LEVELS } from '../utils/xpSystem';
 import { useState } from 'react';
 
 export default function ProgressScreen() {
@@ -15,6 +18,7 @@ export default function ProgressScreen() {
   const cardsMastered = progress.cardsMastered.length;
   const totalAnswered = progress.totalCorrect + progress.totalWrong;
   const globalAccuracy = totalAnswered > 0 ? Math.round((progress.totalCorrect / totalAnswered) * 100) : 0;
+  const xp = progress.xp || 0;
 
   const handleReset = () => {
     if (window.confirm('Êtes-vous sûr de vouloir réinitialiser toute votre progression ?')) {
@@ -51,20 +55,49 @@ export default function ProgressScreen() {
           </button>
         </div>
 
-        {/* Title */}
-        <div className="text-center space-y-3 animate-fade-in-up">
+        {/* Title + Level */}
+        <div className="text-center space-y-4 animate-fade-in-up">
           <h1 className="text-4xl md:text-5xl tracking-tighter font-medium text-gold-gradient">
             Votre Progression
           </h1>
-          <p className="text-sm text-[#A0A2AB]">
-            Statistiques globales de votre apprentissage
-          </p>
+          <div className="flex justify-center">
+            <LevelBadge xp={xp} />
+          </div>
+          <div className="max-w-sm mx-auto">
+            <XPBar xp={xp} />
+          </div>
         </div>
 
         <div className="gold-line" />
 
+        {/* Level progression */}
+        <div className="animate-fade-in-up delay-100 bg-[#12141A] border border-[#D4AF37]/10 rounded-sm p-6">
+          <h3 className="text-sm tracking-[0.15em] uppercase font-semibold text-[#A0A2AB] mb-4">
+            Niveaux de maîtrise
+          </h3>
+          <div className="space-y-3">
+            {LEVELS.map((level, i) => {
+              const isActive = xp >= level.minXP && (level.maxXP === Infinity || xp <= level.maxXP);
+              const isCompleted = xp > level.maxXP;
+              return (
+                <div key={i} className={`flex items-center gap-3 py-2 px-3 rounded-sm transition-all ${isActive ? 'bg-white/5 border border-white/10' : ''}`}>
+                  <div
+                    className={`w-2 h-2 rounded-full ${isCompleted ? 'bg-emerald-400' : isActive ? 'bg-[#D4AF37] animate-pulse' : 'bg-[#565863]/30'}`}
+                  />
+                  <span className={`text-sm flex-1 ${isActive ? 'text-[#E8E9ED] font-medium' : isCompleted ? 'text-emerald-400' : 'text-[#565863]'}`}>
+                    {level.name}
+                  </span>
+                  <span className="text-xs text-[#565863]">
+                    {level.maxXP === Infinity ? `${level.minXP}+ XP` : `${level.minXP}–${level.maxXP} XP`}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
         {/* Main stats */}
-        <div className="animate-fade-in-up delay-100 grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="animate-fade-in-up delay-200 grid grid-cols-2 md:grid-cols-4 gap-4">
           <div className="bg-[#12141A] border border-[#D4AF37]/10 rounded-sm p-5 text-center">
             <BookOpen className="w-5 h-5 text-[#A0A2AB] mx-auto mb-2" />
             <p className="text-2xl font-medium text-[#E8E9ED]" data-testid="progress-seen">{cardsSeen}</p>
@@ -88,7 +121,7 @@ export default function ProgressScreen() {
         </div>
 
         {/* Overall progress bar */}
-        <div className="animate-fade-in-up delay-200 bg-[#12141A] border border-[#D4AF37]/10 rounded-sm p-6">
+        <div className="animate-fade-in-up delay-300 bg-[#12141A] border border-[#D4AF37]/10 rounded-sm p-6">
           <div className="flex items-center justify-between mb-3">
             <span className="text-xs tracking-[0.15em] uppercase font-semibold text-[#A0A2AB]">
               Progression globale
@@ -108,7 +141,7 @@ export default function ProgressScreen() {
 
         {/* Weak laws */}
         {weakLaws.length > 0 && (
-          <div className="animate-fade-in-up delay-300 bg-[#12141A] border border-red-900/20 rounded-sm p-6">
+          <div className="animate-fade-in-up delay-400 bg-[#12141A] border border-red-900/20 rounded-sm p-6">
             <div className="flex items-center gap-2 mb-5">
               <XCircle className="w-4 h-4 text-red-400" />
               <h3 className="text-sm tracking-[0.15em] uppercase font-semibold text-red-400">
@@ -143,7 +176,7 @@ export default function ProgressScreen() {
 
         {/* Session history */}
         {progress.sessions.length > 0 && (
-          <div className="animate-fade-in-up delay-400 bg-[#12141A] border border-[#D4AF37]/10 rounded-sm p-6">
+          <div className="animate-fade-in-up delay-500 bg-[#12141A] border border-[#D4AF37]/10 rounded-sm p-6">
             <h3 className="text-sm tracking-[0.15em] uppercase font-semibold text-[#A0A2AB] mb-4">
               Historique des sessions
             </h3>
@@ -164,6 +197,11 @@ export default function ProgressScreen() {
                     <span className="text-xs text-[#A0A2AB]">
                       {s.total > 0 ? Math.round((s.correct / s.total) * 100) : 0}%
                     </span>
+                    {s.xpGained !== undefined && (
+                      <span className={`text-xs font-semibold ${s.xpGained >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
+                        {s.xpGained > 0 ? '+' : ''}{s.xpGained} XP
+                      </span>
+                    )}
                   </div>
                 </div>
               ))}

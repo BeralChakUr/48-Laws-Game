@@ -9,6 +9,9 @@ function defaultProgress() {
     sessions: [],
     totalCorrect: 0,
     totalWrong: 0,
+    xp: 0,
+    storyCompleted: 0,
+    failedCardIds: [],
   };
 }
 
@@ -31,18 +34,36 @@ export function saveProgress(progress) {
   }
 }
 
+export function addXP(amount) {
+  const progress = loadProgress();
+  progress.xp = Math.max(0, (progress.xp || 0) + amount);
+  saveProgress(progress);
+  return progress.xp;
+}
+
 export function updateProgressAfterSession(sessionResults) {
   const progress = loadProgress();
   const { results, masteredCards } = sessionResults;
+  let sessionXP = 0;
 
   results.forEach((r) => {
     progress.cardsSeen[r.cardId] = (progress.cardsSeen[r.cardId] || 0) + 1;
     if (r.correct) {
       progress.totalCorrect += 1;
       progress.lawCorrect[r.lawNumber] = (progress.lawCorrect[r.lawNumber] || 0) + 1;
+      const wasFailedBefore = (progress.failedCardIds || []).includes(r.cardId);
+      const xpGain = wasFailedBefore ? 15 : 10;
+      sessionXP += xpGain;
+      if (wasFailedBefore) {
+        progress.failedCardIds = (progress.failedCardIds || []).filter(id => id !== r.cardId);
+      }
     } else {
       progress.totalWrong += 1;
       progress.lawErrors[r.lawNumber] = (progress.lawErrors[r.lawNumber] || 0) + 1;
+      sessionXP -= 5;
+      if (!(progress.failedCardIds || []).includes(r.cardId)) {
+        progress.failedCardIds = [...(progress.failedCardIds || []), r.cardId];
+      }
     }
   });
 
@@ -52,15 +73,18 @@ export function updateProgressAfterSession(sessionResults) {
     }
   });
 
+  progress.xp = Math.max(0, (progress.xp || 0) + sessionXP);
+
   progress.sessions.push({
     date: new Date().toISOString(),
     total: results.length,
     correct: results.filter((r) => r.correct).length,
     wrong: results.filter((r) => !r.correct).length,
+    xpGained: sessionXP,
   });
 
   saveProgress(progress);
-  return progress;
+  return { ...progress, sessionXP };
 }
 
 export function resetProgress() {
